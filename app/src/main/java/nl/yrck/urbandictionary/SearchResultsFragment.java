@@ -6,9 +6,19 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import nl.yrck.urbandictionary.adapters.SearchResultsAdapter;
+import nl.yrck.urbandictionary.api.models.SearchResult;
+import nl.yrck.urbandictionary.api.models.WordInfo;
 
 
 /**
@@ -20,7 +30,16 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class SearchResultsFragment extends Fragment {
+
+    public static final String TAG = "SEARCHRESULT_FRAG";
+
     private OnFragmentInteractionListener mListener;
+
+    private RecyclerView recycler;
+    private SearchResultsAdapter adapter;
+    private RecyclerView.LayoutManager lm;
+
+    List<WordInfo> wordInfos;
 
     public SearchResultsFragment() {
         // Required empty public constructor
@@ -51,13 +70,27 @@ public class SearchResultsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search_results, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_search_results, container, false);
+
+        recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
+        recycler.setHasFixedSize(true);
+
+        lm = new LinearLayoutManager(getActivity());
+        recycler.setLayoutManager(lm);
+
+        wordInfos = new ArrayList<>();
+        adapter = new SearchResultsAdapter(wordInfos, getActivity());
+//        adapter.setOnItemClickListener((position, v) -> startDetailsActivity(v));
+
+        recycler.setAdapter(adapter);
+
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+//            mListener.onFragmentInteraction(uri);
         }
     }
 
@@ -78,6 +111,11 @@ public class SearchResultsFragment extends Fragment {
         mListener = null;
     }
 
+    public void activityDataUpdated(SearchResult searchResult) {
+        wordInfos.clear();
+        wordInfos.addAll(searchResult.wordInfos);
+        adapter.notifyDataSetChanged();
+    }
 
 
     /**
@@ -92,6 +130,6 @@ public class SearchResultsFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+//        void onFragmentInteraction(Uri uri);
     }
 }

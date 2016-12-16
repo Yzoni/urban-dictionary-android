@@ -25,37 +25,50 @@
         android:layout_height="match_parent"
         android:layout_marginTop="54dp">
 
-        <LinearLayout
-            android:id="@+id/main_top_layout"
+
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            card_view:cardCornerRadius="4dp">
 
-            <EditText
-                android:id="@+id/search_field"
+            <LinearLayout
+                android:id="@+id/main_top_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="80dp"
+                android:paddingLeft="10dp"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/search_go_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="GO"/>
+                <EditText
+                    android:id="@+id/search_field"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textSize="40sp"
+                    android:hint="Tap to search"
+                    android:background="@android:color/transparent"/>
 
-            <Button
-                android:id="@+id/search_reset_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="X"/>
-        </LinearLayout>
+                <Button
+                    android:id="@+id/search_reset_btn"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="-40dp"
+                    android:background="@android:color/transparent"
+                    android:text="x" />
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
         <FrameLayout
             android:id="@+id/main_bottom_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/main_top_layout">
-        </FrameLayout>
+            android:layout_below="@+id/main_top_layout"></FrameLayout>
     </RelativeLayout>
 
 

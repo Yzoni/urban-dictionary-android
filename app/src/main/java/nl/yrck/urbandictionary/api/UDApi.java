@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class UDApi {
 
     public static final String API_HOST = "api.urbandictionary.com";
-    public static final String API_URL = "http://" + API_HOST + "/v0/define";
+    public static final String API_URL = "http://" + API_HOST + "/v0/";
 
     private OkHttpClient okHttpClient;
     private Retrofit retrofit;
@@ -44,6 +44,7 @@ public class UDApi {
     }
 
     protected void setOkHttpClientDefaults(OkHttpClient.Builder builder) {
+//        enableDebugLogging(true);
         if (enableDebugLogging) {
             logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);

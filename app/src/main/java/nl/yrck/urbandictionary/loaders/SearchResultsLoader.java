@@ -22,12 +22,21 @@ public class SearchResultsLoader extends AsyncTaskLoader<SearchResult> {
     }
 
     @Override
+    protected void onStartLoading() {
+        if (takeContentChanged())
+            forceLoad();
+    }
+
+    @Override
     public SearchResult loadInBackground() {
+        Log.d(TAG, "load in background started");
+
         try {
             Call<SearchResult> searchResultCall = new UDApi().searchService().get(
                     this.searchTerm
             );
-            return searchResultCall.execute().body();
+            SearchResult searchResult = searchResultCall.execute().body();
+            return searchResult;
         } catch (IOException e) {
             Log.e(TAG, "Search failed");
         }
