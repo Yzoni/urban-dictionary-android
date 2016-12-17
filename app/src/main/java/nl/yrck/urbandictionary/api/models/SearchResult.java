@@ -3,9 +3,10 @@ package nl.yrck.urbandictionary.api.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class SearchResult {
+public class SearchResult implements Serializable {
     public List<String> tags;
 
     @SerializedName("result_type")

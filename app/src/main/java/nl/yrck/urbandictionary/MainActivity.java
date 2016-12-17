@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,9 +23,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import nl.yrck.urbandictionary.api.models.SearchResult;
+import nl.yrck.urbandictionary.firebaseModels.SearchHistoryItem;
+import nl.yrck.urbandictionary.firebaseModels.User;
 import nl.yrck.urbandictionary.loaders.SearchResultsLoader;
-import nl.yrck.urbandictionary.models.SearchHistoryItem;
-import nl.yrck.urbandictionary.models.User;
 
 public class MainActivity extends AppCompatActivity
         implements
@@ -37,17 +36,23 @@ public class MainActivity extends AppCompatActivity
 
     private static final int SEARCH_LOADER_ID = 0;
 
-    EditText searchField;
-    Button resetButton;
+    private String activeFragment = SearchHistoryFragment.TAG;
 
-    LoaderManager.LoaderCallbacks<SearchResult> searchResultLoader;
+    private EditText searchField;
+    private Button resetButton;
+    private SearchResult searchResult;
+
+    private LoaderManager.LoaderCallbacks<SearchResult> searchResultLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        searchResultLoader = loaderSearchResult();
 
         searchField = (EditText) findViewById(R.id.search_field);
         searchField.setOnEditorActionListener((view, i, keyEvent) -> onEditTextKey(i));
@@ -55,25 +60,37 @@ public class MainActivity extends AppCompatActivity
         resetButton = (Button) findViewById(R.id.search_reset_btn);
         resetButton.setOnClickListener((v) -> onResetButton());
 
-        searchResultLoader = loaderSearchResult();
+        if (savedInstanceState != null) {
+            searchResult = (SearchResult) savedInstanceState.getSerializable("SEARCH_RESULT");
+            activeFragment = savedInstanceState.getString("ACTIVE_FRAGMENT");
 
-        // Set Firebase to enable offline capabilities
-        FirebaseApp.initializeApp(getApplicationContext());
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            // Set cursor to last character in search field
+            searchField.setSelection(searchField.getText().length());
+        }
 
-        // Initialize with the history bottom fragment
-        SearchHistoryFragment searchHistoryFragment = SearchHistoryFragment.newInstance();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.main_bottom_layout, searchHistoryFragment)
-                .commit();
-
+        // Initialize bottom fragment
+        if (activeFragment.equals(SearchResultsFragment.TAG)) {
+            setResultFragment(searchResult);
+        } else {
+            setHistoryFragment();
+        }
 
         // Handle sign in and out button clicks
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             launchSignIn();
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString("ACTIVE_FRAGMENT", activeFragment);
+
+        if (searchResult != null) {
+            outState.putSerializable("SEARCH_RESULT", searchResult);
+        }
+
+        super.onSaveInstanceState(outState);
     }
 
     /**
@@ -83,11 +100,9 @@ public class MainActivity extends AppCompatActivity
         String searchTerm = searchField.getText().toString();
         Bundle bundle = new Bundle();
         bundle.putString("SEARCH_TERM", searchTerm);
-        SearchResultsFragment searResultsFragment = SearchResultsFragment.newInstance();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.main_bottom_layout, searResultsFragment)
-                .commit();
+        if (!activeFragment.equals(SearchResultsFragment.TAG)) {
+            setResultFragment(searchResult);
+        }
         getSupportLoaderManager()
                 .restartLoader(SEARCH_LOADER_ID, bundle, searchResultLoader).forceLoad();
 
@@ -101,13 +116,7 @@ public class MainActivity extends AppCompatActivity
      */
     private void onResetButton() {
         searchField.setText("");
-
-        SearchHistoryFragment searchHistoryFragment = SearchHistoryFragment.newInstance();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.main_bottom_layout, searchHistoryFragment)
-                .commit();
-
+        setHistoryFragment();
         searchField.requestFocus();
     }
 
@@ -128,6 +137,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_clearHistory:
+                final String userId = getCurrentUserId();
+                DatabaseReference userSearchHistoryReference = FirebaseDatabase.getInstance().getReference()
+                        .child("user-searchhistory").child(userId);
+                userSearchHistoryReference.removeValue();
             case R.id.action_signOut:
                 // Sign out of firebase and launch the login activity
                 FirebaseAuth.getInstance().signOut();
@@ -139,6 +153,16 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Always go back to the search history fragment first, set it another fragment is there
+        if (!activeFragment.equals(SearchHistoryFragment.TAG)) {
+            setHistoryFragment();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private void launchSignIn() {
@@ -153,7 +177,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void saveSearchHistoryItem(String searchTerm) {
-        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final String userId = getCurrentUserId();
         DatabaseReference userSearchHistoryReference = FirebaseDatabase.getInstance().getReference()
                 .child("user-searchhistory").child(userId);
         FirebaseDatabase.getInstance().getReference().addListenerForSingleValueEvent(
@@ -166,7 +190,8 @@ public class MainActivity extends AppCompatActivity
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             String key = userSearchHistoryReference.push().getKey();
-                            SearchHistoryItem savedItem = new SearchHistoryItem(searchTerm);
+                            SearchHistoryItem savedItem = new SearchHistoryItem(
+                                    searchTerm, System.currentTimeMillis() / 1000L);
                             userSearchHistoryReference.child(key).setValue(savedItem);
                         }
                     }
@@ -176,6 +201,34 @@ public class MainActivity extends AppCompatActivity
                         Log.e(TAG, "" + databaseError.toException());
                     }
                 });
+    }
+
+    private SearchHistoryFragment setHistoryFragment() {
+        SearchHistoryFragment searchHistoryFragment = SearchHistoryFragment.newInstance();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_bottom_layout, searchHistoryFragment)
+                .commit();
+
+        activeFragment = SearchHistoryFragment.TAG;
+
+        return searchHistoryFragment;
+    }
+
+    private SearchResultsFragment setResultFragment(SearchResult searchResult) {
+        SearchResultsFragment searchResultsFragment = SearchResultsFragment.newInstance(searchResult);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_bottom_layout, searchResultsFragment)
+                .commit();
+
+        activeFragment = SearchResultsFragment.TAG;
+
+        return searchResultsFragment;
+    }
+
+    private String getCurrentUserId() {
+        return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
     private LoaderManager.LoaderCallbacks<SearchResult> loaderSearchResult() {
@@ -191,8 +244,10 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onLoadFinished(Loader<SearchResult> loader, SearchResult data) {
                 Log.d(TAG, "loader finished");
-                SearchResultsFragment fragment = (SearchResultsFragment) getSupportFragmentManager().findFragmentById(R.id.main_bottom_layout);
-                fragment.activityDataUpdated(data);
+                SearchResultsFragment fragment = (SearchResultsFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.main_bottom_layout);
+                searchResult = data;
+                fragment.activityDataUpdated(searchResult);
             }
 
             @Override

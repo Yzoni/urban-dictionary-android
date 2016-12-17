@@ -46,6 +46,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
+                    android:freezesText="true"
                     android:hint="Tap to search"
                     android:imeOptions="actionSearch"
                     android:inputType="text|textFilter|textNoSuggestions"

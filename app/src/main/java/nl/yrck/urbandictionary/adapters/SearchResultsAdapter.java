@@ -1,6 +1,5 @@
 package nl.yrck.urbandictionary.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,17 +14,10 @@ import nl.yrck.urbandictionary.api.models.WordInfo;
 public class SearchResultsAdapter
         extends RecyclerView.Adapter<SearchResultsAdapter.ViewHolder> {
 
-    private static ClickListener clickListener;
     private List<WordInfo> data;
-    private Context context;
 
-    public SearchResultsAdapter(List<WordInfo> data, Context context) {
+    public SearchResultsAdapter(List<WordInfo> data) {
         this.data = data;
-        this.context = context;
-    }
-
-    public void setOnItemClickListener(ClickListener clickListener) {
-        SearchResultsAdapter.clickListener = clickListener;
     }
 
     @Override
@@ -54,12 +46,7 @@ public class SearchResultsAdapter
         return data.size();
     }
 
-    interface ClickListener {
-        void onItemClick(int position, View v);
-    }
-
-    static class ViewHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView word;
         TextView definition;
@@ -68,19 +55,13 @@ public class SearchResultsAdapter
         TextView thumbsUp;
         TextView thumbsDown;
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
             word = (TextView) v.findViewById(R.id.word);
             definition = (TextView) v.findViewById(R.id.definition);
             example = (TextView) v.findViewById(R.id.example);
             thumbsUp = (TextView) v.findViewById(R.id.thumb_up_txt);
             thumbsDown = (TextView) v.findViewById(R.id.thumb_down_txt);
-            v.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            clickListener.onItemClick(getAdapterPosition(), v);
         }
     }
 }

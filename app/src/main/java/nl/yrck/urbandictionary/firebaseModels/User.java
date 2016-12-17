@@ -1,4 +1,4 @@
-package nl.yrck.urbandictionary.models;
+package nl.yrck.urbandictionary.firebaseModels;
 
 public class User {
 

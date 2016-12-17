@@ -1,6 +1,8 @@
 package nl.yrck.urbandictionary.api.models;
 
-public class WordInfo {
+import java.io.Serializable;
+
+public class WordInfo implements Serializable {
     public int defid;
     public String word;
     public String permalink;

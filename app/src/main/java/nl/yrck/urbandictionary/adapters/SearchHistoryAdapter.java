@@ -8,7 +8,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.Query;
 
 import nl.yrck.urbandictionary.R;
-import nl.yrck.urbandictionary.models.SearchHistoryItem;
+import nl.yrck.urbandictionary.firebaseModels.SearchHistoryItem;
 
 
 public class SearchHistoryAdapter extends FirebaseRecyclerAdapter<SearchHistoryItem, SearchHistoryAdapter.ListItemViewHolder> {

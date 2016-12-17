@@ -18,7 +18,7 @@ import com.google.firebase.database.Query;
 import java.util.List;
 
 import nl.yrck.urbandictionary.adapters.SearchHistoryAdapter;
-import nl.yrck.urbandictionary.models.SearchHistoryItem;
+import nl.yrck.urbandictionary.firebaseModels.SearchHistoryItem;
 
 public class SearchHistoryFragment extends Fragment {
 
@@ -28,7 +28,7 @@ public class SearchHistoryFragment extends Fragment {
     private DatabaseReference database;
     private RecyclerView recycler;
     private SearchHistoryAdapter adapter;
-    private RecyclerView.LayoutManager lm;
+    private LinearLayoutManager lm;
 
     public SearchHistoryFragment() {
         // Required empty public constructor
@@ -53,10 +53,12 @@ public class SearchHistoryFragment extends Fragment {
         recycler.setHasFixedSize(true);
 
         lm = new LinearLayoutManager(getActivity());
+        lm.setStackFromEnd(true);
+        lm.setReverseLayout(true);
         recycler.setLayoutManager(lm);
 
         Query query = database.child(userId);
-        adapter = new SearchHistoryAdapter(SearchHistoryItem.class, R.layout.search_history_item, query);
+        adapter = new SearchHistoryAdapter(SearchHistoryItem.class, R.layout.search_history_item, query.orderByChild("timestamp"));
         adapter.setOnItemClickListener((position, v) -> useHistoryItem(v));
         recycler.setAdapter(adapter);
 

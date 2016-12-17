@@ -4,11 +4,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,40 +18,24 @@ import nl.yrck.urbandictionary.api.models.SearchResult;
 import nl.yrck.urbandictionary.api.models.WordInfo;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SearchResultsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SearchResultsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class SearchResultsFragment extends Fragment {
 
     public static final String TAG = "SEARCHRESULT_FRAG";
-
-    private OnFragmentInteractionListener mListener;
-
+    SearchResult searchResult;
+    List<WordInfo> wordInfos = new ArrayList<>();
+    private OnFragmentInteractionListener onFragmentInteractionListener;
     private RecyclerView recycler;
     private SearchResultsAdapter adapter;
     private RecyclerView.LayoutManager lm;
-
-    List<WordInfo> wordInfos;
 
     public SearchResultsFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment SearchResultsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SearchResultsFragment newInstance() {
+    public static SearchResultsFragment newInstance(SearchResult searchResult) {
         SearchResultsFragment fragment = new SearchResultsFragment();
         Bundle args = new Bundle();
+        args.putSerializable("SEARCH_RESULT", searchResult);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,6 +44,12 @@ public class SearchResultsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            Bundle args = getArguments();
+            searchResult = (SearchResult) args.getSerializable("SEARCH_RESULT");
+            if (searchResult != null) {
+                wordInfos.clear();
+                wordInfos.addAll(searchResult.wordInfos);
+            }
         }
     }
 
@@ -78,19 +65,17 @@ public class SearchResultsFragment extends Fragment {
         lm = new LinearLayoutManager(getActivity());
         recycler.setLayoutManager(lm);
 
-        wordInfos = new ArrayList<>();
-        adapter = new SearchResultsAdapter(wordInfos, getActivity());
-//        adapter.setOnItemClickListener((position, v) -> startDetailsActivity(v));
+        adapter = new SearchResultsAdapter(wordInfos);
+        adapter.notifyDataSetChanged();
 
         recycler.setAdapter(adapter);
 
         return rootView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
+        if (onFragmentInteractionListener != null) {
+//            onFragmentInteractionListener.onFragmentInteraction(uri);
         }
     }
 
@@ -98,7 +83,7 @@ public class SearchResultsFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+            onFragmentInteractionListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -108,7 +93,7 @@ public class SearchResultsFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        onFragmentInteractionListener = null;
     }
 
     public void activityDataUpdated(SearchResult searchResult) {
@@ -117,17 +102,6 @@ public class SearchResultsFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
 //        void onFragmentInteraction(Uri uri);
