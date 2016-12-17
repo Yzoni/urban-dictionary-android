@@ -1,32 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app2="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
-        android:layout_margin="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_margin="8dp"
         card_view:cardCornerRadius="4dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="16dp">
 
             <TextView
-                android:id="@+id/definition"
+                android:id="@+id/word"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="Search term"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/example"
+            <LinearLayout
+                android:id="@+id/vote_layout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/thumb_down_btn"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@null"
+                    android:contentDescription="Thumbs down"
+                    app2:srcCompat="@drawable/ic_thumb_down_black_24px" />
+
+                <TextView
+                    android:id="@+id/thumb_down_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="303" />
+
+                <ImageView
+                    android:id="@+id/thumb_up_btn"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@null"
+                    android:contentDescription="Thumbs up"
+                    app2:srcCompat="@drawable/ic_thumb_up_black_24px" />
+
+                <TextView
+                    android:id="@+id/thumb_up_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="39" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/text_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/vote_layout"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/definition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sample_definition" />
+
+                <TextView
+                    android:id="@+id/example"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/sample_example"
+                    android:textStyle="italic" />
+            </LinearLayout>
+        </RelativeLayout>
     </android.support.v7.widget.CardView>
 
 

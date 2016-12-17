@@ -4,4 +4,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <!--<string name="sample_example">\"You didn't make eye contact while saying 'thank you.' You failed the test.\"\r\n\r\n\"You forgot to hold the door open for me... failed the test.\"\r\n\r\n\"You passed the test - you offered me a piece of sausage from your pizza.\"</string>-->
+    <string name="sample_example">test_example</string>
+    <string name="sample_definition">test_definition</string>
+    <!--<string name="sample_definition">A means of evaluating another person's character through a series of unannounced, inconspicuous examinations. Developed by Eddie, it serves to define which people are desirable company and which should not be associated with. As a general rule, a test-passer is a good person while a test-failer is a bad person.\r\n\r\nPassing the test results in the joyous proclamation that \"You pass the test!\"\r\n\r\nFailure of a test is announced simply by saying \"You failed the test.\" This phrase is often used to show general disdain for a person's existence.\r\n</string>-->
+
 </resources>

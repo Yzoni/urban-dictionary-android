@@ -1,17 +1,11 @@
 package nl.yrck.urbandictionary;
 
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
@@ -34,7 +28,6 @@ public class MainActivity extends AppCompatActivity
     private static final int SEARCH_LOADER_ID = 0;
 
     EditText searchField;
-    Button searchButton;
     Button resetButton;
 
     LoaderManager.LoaderCallbacks<SearchResult> searchResultLoader;
@@ -98,7 +91,7 @@ public class MainActivity extends AppCompatActivity
 
     private boolean onEditTextKey(int actionId) {
         if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-           doSearch();
+            doSearch();
         }
         return true;
     }

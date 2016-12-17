@@ -5,11 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -41,9 +37,15 @@ public class SearchResultsAdapter
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.definition.setText(data.get(position).definition);
-//        holder.example.setText(data.get(position).example);
-        String id = Integer.toString(data.get(position).defid);
+        WordInfo wordInfo = data.get(position);
+        holder.word.setText(wordInfo.word);
+        holder.definition.setText(wordInfo.definition);
+        holder.example.setText(wordInfo.example);
+
+        holder.thumbsUp.setText(wordInfo.thumbs_up);
+        holder.thumbsDown.setText(wordInfo.thumbs_down);
+
+        String id = Integer.toString(wordInfo.defid);
         holder.itemView.setTag(id);
     }
 
@@ -52,20 +54,27 @@ public class SearchResultsAdapter
         return data.size();
     }
 
-    public interface ClickListener {
+    interface ClickListener {
         void onItemClick(int position, View v);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder
+    static class ViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
-        public TextView definition;
-//        public TextView example;
 
+        TextView word;
+        TextView definition;
+        TextView example;
+
+        TextView thumbsUp;
+        TextView thumbsDown;
 
         public ViewHolder(View v) {
             super(v);
+            word = (TextView) v.findViewById(R.id.word);
             definition = (TextView) v.findViewById(R.id.definition);
-//            example = (TextView) v.findViewById(R.id.example);
+            example = (TextView) v.findViewById(R.id.example);
+            thumbsUp = (TextView) v.findViewById(R.id.thumb_up_txt);
+            thumbsDown = (TextView) v.findViewById(R.id.thumb_down_txt);
             v.setOnClickListener(this);
         }
 

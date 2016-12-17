@@ -25,7 +25,6 @@
         android:layout_height="match_parent"
         android:layout_marginTop="54dp">
 
-
         <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:id="@+id/card_view"
             android:layout_width="match_parent"
@@ -37,8 +36,8 @@
                 android:id="@+id/main_top_layout"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:paddingLeft="10dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="10dp">
 
                 <EditText
                     android:id="@+id/search_field"
@@ -46,12 +45,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:imeOptions="actionSearch"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:textSize="40sp"
+                    android:background="@android:color/transparent"
                     android:hint="Tap to search"
-                    android:background="@android:color/transparent"/>
+                    android:imeOptions="actionSearch"
+                    android:inputType="text|textFilter|textNoSuggestions"
+                    android:maxLines="1"
+                    android:textSize="40sp" />
 
                 <Button
                     android:id="@+id/search_reset_btn"
@@ -68,7 +67,9 @@
             android:id="@+id/main_bottom_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/main_top_layout"></FrameLayout>
+            android:layout_marginTop="80dp">
+
+        </FrameLayout>
     </RelativeLayout>
 
 
