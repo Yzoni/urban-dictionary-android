@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Urban Dictionary</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_signOut">Sign out</string>
+    <string name="action_about">About</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -10,5 +11,25 @@
     <string name="sample_example">test_example</string>
     <string name="sample_definition">test_definition</string>
     <!--<string name="sample_definition">A means of evaluating another person's character through a series of unannounced, inconspicuous examinations. Developed by Eddie, it serves to define which people are desirable company and which should not be associated with. As a general rule, a test-passer is a good person while a test-failer is a bad person.\r\n\r\nPassing the test results in the joyous proclamation that \"You pass the test!\"\r\n\r\nFailure of a test is announced simply by saying \"You failed the test.\" This phrase is often used to show general disdain for a person's existence.\r\n</string>-->
+
+    <string name="menu_login">Log in</string>
+    <string name="menu_logout">Log out</string>
+    <string name="login_label">Log In</string>
+    <string name="email_label">Email</string>
+    <string name="password_label">Password</string>
+    <string name="send_text">Send</string>
+    <string name="title_sign_in">Login</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="hint_password">password</string>
+    <string name="hint_email">email</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_in_failed">Sign In Failed</string>
+    <string name="sign_up_failed">Sign Up Failed</string>
+    <string name="signup_error_required">Required</string>
+    <string name="button_sigin">SignIn</string>
+    <string name="button_signout">SignOut</string>
+    <string name="error_no_internet">No internet</string>
+    <string name="error_fetching_user">Error: could not fetch user.</string>
+    <string name="error_no_data">No data received</string>
 
 </resources>
