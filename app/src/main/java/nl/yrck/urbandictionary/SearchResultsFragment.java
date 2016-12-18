@@ -3,12 +3,14 @@ package nl.yrck.urbandictionary;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +23,12 @@ import nl.yrck.urbandictionary.api.models.WordInfo;
 public class SearchResultsFragment extends Fragment {
 
     public static final String TAG = "SEARCHRESULT_FRAG";
-    SearchResult searchResult;
-    List<WordInfo> wordInfos = new ArrayList<>();
+    private SearchResult searchResult;
+    private List<WordInfo> wordInfos = new ArrayList<>();
     private RecyclerView recycler;
     private SearchResultsAdapter adapter;
     private RecyclerView.LayoutManager lm;
+    private TextView noResults;
 
     public SearchResultsFragment() {
         // Required empty public constructor
@@ -58,6 +61,11 @@ public class SearchResultsFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_search_results, container, false);
 
+        noResults = (TextView) rootView.findViewById(R.id.no_results_txt);
+        if (wordInfos.size() <= 0) {
+            noResults.setVisibility(View.VISIBLE);
+        }
+
         recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
         recycler.setHasFixedSize(true);
 
@@ -85,7 +93,16 @@ public class SearchResultsFragment extends Fragment {
 
     public void activityDataUpdated(SearchResult searchResult) {
         wordInfos.clear();
-        wordInfos.addAll(searchResult.wordInfos);
+        if (searchResult != null) {
+            wordInfos.addAll(searchResult.wordInfos);
+        }
+
+        if (wordInfos.size() <= 0) {
+            noResults.setVisibility(View.VISIBLE);
+        } else {
+            noResults.setVisibility(View.GONE);
+        }
+
         adapter.notifyDataSetChanged();
     }
 }
