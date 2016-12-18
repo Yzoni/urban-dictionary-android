@@ -32,5 +32,7 @@
     <string name="error_no_internet">No internet</string>
     <string name="error_fetching_user">Error: could not fetch user.</string>
     <string name="error_no_data">No data received</string>
+    <string name="signup_error_invalidemail">Email invalid</string>
+    <string name="signup_error_password_to_short">Password not long enough</string>
 
 </resources>

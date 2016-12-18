@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;
@@ -13,6 +14,8 @@ import nl.yrck.urbandictionary.api.models.WordInfo;
 
 public class SearchResultsAdapter
         extends RecyclerView.Adapter<SearchResultsAdapter.ViewHolder> {
+
+    private static SearchResultsAdapter.ClickListener clickListener;
 
     private List<WordInfo> data;
 
@@ -46,7 +49,15 @@ public class SearchResultsAdapter
         return data.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public void setOnLinkButtonClickListener(SearchResultsAdapter.ClickListener clickListener) {
+        SearchResultsAdapter.clickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onLinkButtonClick(int position, View view);
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView word;
         TextView definition;
@@ -55,6 +66,8 @@ public class SearchResultsAdapter
         TextView thumbsUp;
         TextView thumbsDown;
 
+        ImageButton linkButton;
+
         ViewHolder(View v) {
             super(v);
             word = (TextView) v.findViewById(R.id.word);
@@ -62,6 +75,13 @@ public class SearchResultsAdapter
             example = (TextView) v.findViewById(R.id.example);
             thumbsUp = (TextView) v.findViewById(R.id.thumb_up_txt);
             thumbsDown = (TextView) v.findViewById(R.id.thumb_down_txt);
+            linkButton = (ImageButton) v.findViewById(R.id.link_btn);
+            linkButton.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            clickListener.onLinkButtonClick(getAdapterPosition(), v);
         }
     }
 }

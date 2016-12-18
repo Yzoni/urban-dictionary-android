@@ -67,7 +67,7 @@ public class SignInActivity extends AppCompatActivity {
         // Disallow back presses
     }
 
-    /**
+    /*
      * Handle sign in
      */
     private void signIn() {
@@ -91,7 +91,7 @@ public class SignInActivity extends AppCompatActivity {
                 });
     }
 
-    /**
+    /*
      * handle sign up
      */
     private void signUp() {
@@ -117,10 +117,8 @@ public class SignInActivity extends AppCompatActivity {
                 });
     }
 
-    /**
+    /*
      * Write the new user to the database
-     *
-     * @param user
      */
     private void onAuthSuccess(FirebaseUser user) {
         String username = usernameFromEmail(user.getEmail());
@@ -146,12 +144,18 @@ public class SignInActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(email.getText().toString())) {
             email.setError(getString(R.string.signup_error_required));
             result = false;
+        } else if (!email.getText().toString().contains("@")) {
+            email.setError(getString(R.string.signup_error_invalidemail));
+            result = false;
         } else {
             email.setError(null);
         }
 
         if (TextUtils.isEmpty(password.getText().toString())) {
             password.setError(getString(R.string.signup_error_required));
+            result = false;
+        } else if (password.getText().toString().length() < 8) {
+            password.setError(getString(R.string.signup_error_password_to_short));
             result = false;
         } else {
             password.setError(null);
@@ -162,7 +166,6 @@ public class SignInActivity extends AppCompatActivity {
 
     private void writeNewUser(String userId, String name, String email) {
         User user = new User(name, email);
-
         database.child("users").child(userId).setValue(user);
     }
 

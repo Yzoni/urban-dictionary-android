@@ -1,7 +1,7 @@
 package nl.yrck.urbandictionary;
 
 import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -67,16 +67,21 @@ public class SearchResultsFragment extends Fragment {
 
         adapter = new SearchResultsAdapter(wordInfos);
         adapter.notifyDataSetChanged();
+        adapter.setOnLinkButtonClickListener((position, view) -> onLinkButton(position));
 
         recycler.setAdapter(adapter);
 
         return rootView;
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (onFragmentInteractionListener != null) {
-//            onFragmentInteractionListener.onFragmentInteraction(uri);
-        }
+    public void onLinkButton(int position) {
+        WordInfo wordInfo = wordInfos.get(position);
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT,
+                wordInfo.word + "\r\n\n" + wordInfo.definition + "\r\n\n" + wordInfo.permalink);
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
     }
 
     @Override

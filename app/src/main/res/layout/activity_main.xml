@@ -65,6 +65,19 @@
         </android.support.v7.widget.CardView>
 
         <FrameLayout
+            android:id="@+id/main_bottom_layout_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="80dp"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
+        <FrameLayout
             android:id="@+id/main_bottom_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

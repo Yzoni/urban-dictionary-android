@@ -9,9 +9,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import nl.yrck.urbandictionary.api.models.SearchResult;
+import nl.yrck.urbandictionary.dialogs.AboutDialog;
 import nl.yrck.urbandictionary.firebaseModels.SearchHistoryItem;
 import nl.yrck.urbandictionary.firebaseModels.User;
 import nl.yrck.urbandictionary.loaders.SearchResultsLoader;
@@ -41,12 +44,21 @@ public class MainActivity extends AppCompatActivity
     private EditText searchField;
     private Button resetButton;
     private SearchResult searchResult;
+    private FrameLayout spinnerLayout;
+    private FrameLayout mainBottomLayout;
 
     private LoaderManager.LoaderCallbacks<SearchResult> searchResultLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Handle sign in and out button clicks
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            launchSignIn();
+            return;
+        }
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -59,6 +71,9 @@ public class MainActivity extends AppCompatActivity
 
         resetButton = (Button) findViewById(R.id.search_reset_btn);
         resetButton.setOnClickListener((v) -> onResetButton());
+
+        spinnerLayout = (FrameLayout) findViewById(R.id.main_bottom_layout_spinner);
+        mainBottomLayout = (FrameLayout) findViewById(R.id.main_bottom_layout);
 
         if (savedInstanceState != null) {
             searchResult = (SearchResult) savedInstanceState.getSerializable("SEARCH_RESULT");
@@ -73,12 +88,6 @@ public class MainActivity extends AppCompatActivity
             setResultFragment(searchResult);
         } else {
             setHistoryFragment();
-        }
-
-        // Handle sign in and out button clicks
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            launchSignIn();
         }
     }
 
@@ -97,6 +106,9 @@ public class MainActivity extends AppCompatActivity
      * Swap the bottom fragment with a new fragment displaying the search results
      */
     private void doSearch() {
+        mainBottomLayout.setVisibility(View.GONE);
+        spinnerLayout.setVisibility(View.VISIBLE);
+
         String searchTerm = searchField.getText().toString();
         Bundle bundle = new Bundle();
         bundle.putString("SEARCH_TERM", searchTerm);
@@ -110,10 +122,7 @@ public class MainActivity extends AppCompatActivity
         saveSearchHistoryItem(searchTerm);
     }
 
-    /**
-     * When history is not yet showing. Swap the bottom fragment with a new fragment displaying
-     * the search history. Also clear the search text.
-     */
+
     private void onResetButton() {
         searchField.setText("");
         setHistoryFragment();
@@ -137,11 +146,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_clearHistory:
-                final String userId = getCurrentUserId();
-                DatabaseReference userSearchHistoryReference = FirebaseDatabase.getInstance().getReference()
-                        .child("user-searchhistory").child(userId);
-                userSearchHistoryReference.removeValue();
             case R.id.action_signOut:
                 // Sign out of firebase and launch the login activity
                 FirebaseAuth.getInstance().signOut();
@@ -149,6 +153,7 @@ public class MainActivity extends AppCompatActivity
                 finish();
                 return true;
             case R.id.action_about:
+                AboutDialog.show(this);
                 return true;
         }
 
@@ -235,19 +240,21 @@ public class MainActivity extends AppCompatActivity
         return new LoaderManager.LoaderCallbacks<SearchResult>() {
             @Override
             public Loader<SearchResult> onCreateLoader(int id, Bundle args) {
-                Log.d(TAG, "test button search");
                 String searchTerm = args.getString("SEARCH_TERM");
-                Log.d(TAG, searchTerm);
                 return new SearchResultsLoader(getApplication(), searchTerm);
             }
 
             @Override
             public void onLoadFinished(Loader<SearchResult> loader, SearchResult data) {
-                Log.d(TAG, "loader finished");
+                // Update list data inside the fragment
                 SearchResultsFragment fragment = (SearchResultsFragment) getSupportFragmentManager()
                         .findFragmentById(R.id.main_bottom_layout);
                 searchResult = data;
                 fragment.activityDataUpdated(searchResult);
+
+                // Hide loading spinner show content
+                spinnerLayout.setVisibility(View.GONE);
+                mainBottomLayout.setVisibility(View.VISIBLE);
             }
 
             @Override
