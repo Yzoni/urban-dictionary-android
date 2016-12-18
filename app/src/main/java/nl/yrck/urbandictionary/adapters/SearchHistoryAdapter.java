@@ -33,7 +33,8 @@ public class SearchHistoryAdapter extends FirebaseRecyclerAdapter<SearchHistoryI
         void onItemClick(int position, View v);
     }
 
-    static class ListItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ListItemViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
 
         private TextView term;
 
