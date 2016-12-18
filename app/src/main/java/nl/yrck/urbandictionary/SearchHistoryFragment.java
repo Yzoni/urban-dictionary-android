@@ -15,15 +15,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
-import java.util.List;
-
 import nl.yrck.urbandictionary.adapters.SearchHistoryAdapter;
 import nl.yrck.urbandictionary.firebaseModels.SearchHistoryItem;
 
 public class SearchHistoryFragment extends Fragment {
 
     public static String TAG = "SEARCH_HIST_FRAGMENT";
-    List<SearchHistoryItem> searchHistoryItems;
     private OnFragmentInteractionListener onFragmentInteractionListener;
     private DatabaseReference database;
     private RecyclerView recycler;
@@ -65,6 +62,9 @@ public class SearchHistoryFragment extends Fragment {
         return rootView;
     }
 
+    /*
+     * From a history item view in the list get the term text and put it in the search field.
+     */
     private boolean useHistoryItem(View v) {
         TextView textView = (TextView) v.findViewById(R.id.search_term_txt);
         String searchText = textView.getText().toString();

@@ -11,7 +11,8 @@ import nl.yrck.urbandictionary.R;
 import nl.yrck.urbandictionary.firebaseModels.SearchHistoryItem;
 
 
-public class SearchHistoryAdapter extends FirebaseRecyclerAdapter<SearchHistoryItem, SearchHistoryAdapter.ListItemViewHolder> {
+public class SearchHistoryAdapter extends FirebaseRecyclerAdapter<SearchHistoryItem,
+        SearchHistoryAdapter.ListItemViewHolder> {
 
     private static SearchHistoryAdapter.ClickListener clickListener;
 
@@ -32,7 +33,7 @@ public class SearchHistoryAdapter extends FirebaseRecyclerAdapter<SearchHistoryI
         void onItemClick(int position, View v);
     }
 
-    public static class ListItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    static class ListItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView term;
 
@@ -40,10 +41,11 @@ public class SearchHistoryAdapter extends FirebaseRecyclerAdapter<SearchHistoryI
             super(v);
             term = (TextView) v.findViewById(R.id.search_term_txt);
 
+            // Set click listener on the whole view
             v.setOnClickListener(this);
         }
 
-        public void bindToPost(SearchHistoryItem savedItem) {
+        void bindToPost(SearchHistoryItem savedItem) {
             term.setText(savedItem.term);
         }
 

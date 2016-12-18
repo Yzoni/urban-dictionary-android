@@ -23,7 +23,6 @@ public class SearchResultsFragment extends Fragment {
     public static final String TAG = "SEARCHRESULT_FRAG";
     SearchResult searchResult;
     List<WordInfo> wordInfos = new ArrayList<>();
-    private OnFragmentInteractionListener onFragmentInteractionListener;
     private RecyclerView recycler;
     private SearchResultsAdapter adapter;
     private RecyclerView.LayoutManager lm;
@@ -84,31 +83,9 @@ public class SearchResultsFragment extends Fragment {
         startActivity(sendIntent);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            onFragmentInteractionListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        onFragmentInteractionListener = null;
-    }
-
     public void activityDataUpdated(SearchResult searchResult) {
         wordInfos.clear();
         wordInfos.addAll(searchResult.wordInfos);
         adapter.notifyDataSetChanged();
-    }
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-//        void onFragmentInteraction(Uri uri);
     }
 }

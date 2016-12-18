@@ -12,8 +12,7 @@ import java.util.List;
 import nl.yrck.urbandictionary.R;
 import nl.yrck.urbandictionary.api.models.WordInfo;
 
-public class SearchResultsAdapter
-        extends RecyclerView.Adapter<SearchResultsAdapter.ViewHolder> {
+public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdapter.ViewHolder> {
 
     private static SearchResultsAdapter.ClickListener clickListener;
 

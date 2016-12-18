@@ -17,7 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import nl.yrck.urbandictionary.firebaseModels.User;
 
 
-/**
+/*
  * Handles signin and signup
  * <p>
  * Boilerplate code taken from

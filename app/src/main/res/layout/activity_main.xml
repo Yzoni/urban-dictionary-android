@@ -37,7 +37,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:orientation="horizontal"
-                android:paddingLeft="10dp">
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
 
                 <EditText
                     android:id="@+id/search_field"
@@ -47,7 +48,7 @@
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:freezesText="true"
-                    android:hint="Tap to search"
+                    android:hint="@string/tap_to_search"
                     android:imeOptions="actionSearch"
                     android:inputType="text|textFilter|textNoSuggestions"
                     android:maxLines="1"

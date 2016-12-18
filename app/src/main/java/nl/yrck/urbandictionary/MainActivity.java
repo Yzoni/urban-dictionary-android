@@ -31,9 +31,7 @@ import nl.yrck.urbandictionary.firebaseModels.User;
 import nl.yrck.urbandictionary.loaders.SearchResultsLoader;
 
 public class MainActivity extends AppCompatActivity
-        implements
-        SearchResultsFragment.OnFragmentInteractionListener,
-        SearchHistoryFragment.OnFragmentInteractionListener {
+        implements SearchHistoryFragment.OnFragmentInteractionListener {
 
     public static final String TAG = "MAIN_ACTIVITY";
 
@@ -53,7 +51,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Handle sign in and out button clicks
+        // Test if user is singed in, if not then force launch sign in activity
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             launchSignIn();
@@ -95,6 +93,7 @@ public class MainActivity extends AppCompatActivity
     protected void onSaveInstanceState(Bundle outState) {
         outState.putString("ACTIVE_FRAGMENT", activeFragment);
 
+        // Save all the search result data
         if (searchResult != null) {
             outState.putSerializable("SEARCH_RESULT", searchResult);
         }
@@ -102,13 +101,14 @@ public class MainActivity extends AppCompatActivity
         super.onSaveInstanceState(outState);
     }
 
-    /**
+    /*
      * Swap the bottom fragment with a new fragment displaying the search results
      */
     private void doSearch() {
         mainBottomLayout.setVisibility(View.GONE);
         spinnerLayout.setVisibility(View.VISIBLE);
 
+        // Push the search query from the edit text search field to the loader and api
         String searchTerm = searchField.getText().toString();
         Bundle bundle = new Bundle();
         bundle.putString("SEARCH_TERM", searchTerm);
@@ -123,6 +123,9 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    /*
+     * Reset the search field and
+     */
     private void onResetButton() {
         searchField.setText("");
         setHistoryFragment();
@@ -175,12 +178,18 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    /*
+     * Sets the search field from a fragment
+     */
     @Override
     public void setSearchField(String historyTerm) {
         searchField.setText(historyTerm);
         doSearch();
     }
 
+    /*
+     * Save a search term to the firebase database search history
+     */
     private void saveSearchHistoryItem(String searchTerm) {
         final String userId = getCurrentUserId();
         DatabaseReference userSearchHistoryReference = FirebaseDatabase.getInstance().getReference()
@@ -208,7 +217,10 @@ public class MainActivity extends AppCompatActivity
                 });
     }
 
-    private SearchHistoryFragment setHistoryFragment() {
+    /*
+     * Sets the history fragment as the bottom layout and sets active fragment flag
+     */
+    private void setHistoryFragment() {
         SearchHistoryFragment searchHistoryFragment = SearchHistoryFragment.newInstance();
         getSupportFragmentManager()
                 .beginTransaction()
@@ -216,11 +228,12 @@ public class MainActivity extends AppCompatActivity
                 .commit();
 
         activeFragment = SearchHistoryFragment.TAG;
-
-        return searchHistoryFragment;
     }
 
-    private SearchResultsFragment setResultFragment(SearchResult searchResult) {
+    /*
+     * Sets the results fragment as the bottom layout and sets active fragment flag
+     */
+    private void setResultFragment(SearchResult searchResult) {
         SearchResultsFragment searchResultsFragment = SearchResultsFragment.newInstance(searchResult);
         getSupportFragmentManager()
                 .beginTransaction()
@@ -228,8 +241,6 @@ public class MainActivity extends AppCompatActivity
                 .commit();
 
         activeFragment = SearchResultsFragment.TAG;
-
-        return searchResultsFragment;
     }
 
     private String getCurrentUserId() {

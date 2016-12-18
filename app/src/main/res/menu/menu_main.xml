@@ -3,11 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="nl.yrck.urbandictionary.MainActivity">
     <item
-        android:id="@+id/action_clearHistory"
-        android:orderInCategory="99"
-        android:title="@string/action_clearHistory"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_signOut"
         android:orderInCategory="100"
         android:title="@string/action_signOut"

@@ -12,47 +12,26 @@ public class UDApi {
 
     private OkHttpClient okHttpClient;
     private Retrofit retrofit;
-    private HttpLoggingInterceptor logging;
-
-    private boolean enableDebugLogging;
 
     public UDApi() {
     }
 
-    public UDApi enableDebugLogging(boolean enable) {
-        this.enableDebugLogging = enable;
-        if (logging != null) {
-            logging.setLevel(enable ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
-        }
-        return this;
-    }
-
-    protected Retrofit.Builder retrofitBuilder() {
+    private Retrofit.Builder retrofitBuilder() {
         return new Retrofit.Builder()
                 .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient());
     }
 
-    protected synchronized OkHttpClient okHttpClient() {
+    private synchronized OkHttpClient okHttpClient() {
         if (okHttpClient == null) {
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
-            setOkHttpClientDefaults(builder);
             okHttpClient = builder.build();
         }
         return okHttpClient;
     }
 
-    protected void setOkHttpClientDefaults(OkHttpClient.Builder builder) {
-//        enableDebugLogging(true);
-        if (enableDebugLogging) {
-            logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-            builder.addInterceptor(logging);
-        }
-    }
-
-    protected Retrofit getRetrofit() {
+    private Retrofit getRetrofit() {
         if (retrofit == null) {
             retrofit = retrofitBuilder().build();
         }

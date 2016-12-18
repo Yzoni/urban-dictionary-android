@@ -34,5 +34,9 @@
     <string name="error_no_data">No data received</string>
     <string name="signup_error_invalidemail">Email invalid</string>
     <string name="signup_error_password_to_short">Password not long enough</string>
+    <string name="tap_to_search">Tap to search</string>
+    <string name="link_button">Link button</string>
+    <string name="thumbs_down">Thumbs down</string>
+    <string name="thumbs_up">Thumbs up</string>
 
 </resources>
