@@ -1,3 +1,7 @@
+/*
+ * Yorick de Boer - 10786015
+ */
+
 package nl.yrck.urbandictionary.dialogs;
 
 import android.content.Context;

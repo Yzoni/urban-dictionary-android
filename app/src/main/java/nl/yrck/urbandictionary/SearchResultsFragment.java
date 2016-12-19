@@ -1,5 +1,5 @@
 /*
- * Yorick de Boer - 19786015
+ * Yorick de Boer - 10786015
  */
 
 package nl.yrck.urbandictionary;
