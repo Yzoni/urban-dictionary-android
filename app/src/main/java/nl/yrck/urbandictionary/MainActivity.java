@@ -2,6 +2,7 @@ package nl.yrck.urbandictionary;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +31,9 @@ import nl.yrck.urbandictionary.firebaseModels.SearchHistoryItem;
 import nl.yrck.urbandictionary.firebaseModels.User;
 import nl.yrck.urbandictionary.loaders.SearchResultsLoader;
 
+/*
+ * The main activity containing the search field and a layout for dynamic fragment switching
+ */
 public class MainActivity extends AppCompatActivity
         implements SearchHistoryFragment.OnFragmentInteractionListener {
 
@@ -243,10 +247,17 @@ public class MainActivity extends AppCompatActivity
         activeFragment = SearchResultsFragment.TAG;
     }
 
+    /*
+     * Gets the currently logged in user id
+     */
+    @NonNull
     private String getCurrentUserId() {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
+    /*
+     * Loader implementation for the the search results
+     */
     private LoaderManager.LoaderCallbacks<SearchResult> loaderSearchResult() {
         return new LoaderManager.LoaderCallbacks<SearchResult>() {
             @Override

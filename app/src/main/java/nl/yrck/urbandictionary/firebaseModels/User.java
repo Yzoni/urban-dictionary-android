@@ -6,7 +6,7 @@ public class User {
     public String email;
 
     public User() {
-        // Empty constructor needed for Firebase
+        // Required empty constructor for Firebase
     }
 
     public User(String username, String email) {

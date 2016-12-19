@@ -6,7 +6,7 @@ public class SearchHistoryItem {
     public Long timestamp;
 
     public SearchHistoryItem() {
-        // Empty constructor needed for Firebase
+        // Required empty constructor for Firebase
     }
 
     public SearchHistoryItem(String term, Long timestamp) {

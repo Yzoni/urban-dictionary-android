@@ -1,9 +1,11 @@
+/*
+ * Yorick de Boer - 19786015
+ */
+
 package nl.yrck.urbandictionary;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,21 +21,23 @@ import nl.yrck.urbandictionary.adapters.SearchResultsAdapter;
 import nl.yrck.urbandictionary.api.models.SearchResult;
 import nl.yrck.urbandictionary.api.models.WordInfo;
 
-
+/*
+ * This fragment displays the search results in a recyclerview
+ */
 public class SearchResultsFragment extends Fragment {
 
     public static final String TAG = "SEARCHRESULT_FRAG";
-    private SearchResult searchResult;
     private List<WordInfo> wordInfos = new ArrayList<>();
-    private RecyclerView recycler;
     private SearchResultsAdapter adapter;
-    private RecyclerView.LayoutManager lm;
     private TextView noResults;
 
     public SearchResultsFragment() {
         // Required empty public constructor
     }
 
+    /*
+     * Create a new instance of the fragment giving a SearchResult object as argument
+     */
     public static SearchResultsFragment newInstance(SearchResult searchResult) {
         SearchResultsFragment fragment = new SearchResultsFragment();
         Bundle args = new Bundle();
@@ -47,7 +51,8 @@ public class SearchResultsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             Bundle args = getArguments();
-            searchResult = (SearchResult) args.getSerializable("SEARCH_RESULT");
+            SearchResult searchResult = (SearchResult) args.getSerializable("SEARCH_RESULT");
+            // Search result could be null when the loader is not finished getting the result data
             if (searchResult != null) {
                 wordInfos.clear();
                 wordInfos.addAll(searchResult.wordInfos);
@@ -66,10 +71,10 @@ public class SearchResultsFragment extends Fragment {
             noResults.setVisibility(View.VISIBLE);
         }
 
-        recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
+        RecyclerView recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
         recycler.setHasFixedSize(true);
 
-        lm = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager lm = new LinearLayoutManager(getActivity());
         recycler.setLayoutManager(lm);
 
         adapter = new SearchResultsAdapter(wordInfos);
@@ -81,7 +86,11 @@ public class SearchResultsFragment extends Fragment {
         return rootView;
     }
 
-    public void onLinkButton(int position) {
+    /*
+     * Launches a text share intent containing a word definition and permalink
+     * from a result element.
+     */
+    private void onLinkButton(int position) {
         WordInfo wordInfo = wordInfos.get(position);
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
@@ -91,12 +100,16 @@ public class SearchResultsFragment extends Fragment {
         startActivity(sendIntent);
     }
 
+    /*
+     * Used to refresh the fragment data from an activity
+     */
     public void activityDataUpdated(SearchResult searchResult) {
         wordInfos.clear();
         if (searchResult != null) {
             wordInfos.addAll(searchResult.wordInfos);
         }
 
+        // Make the text indicating no results could be found visible
         if (wordInfos.size() <= 0) {
             noResults.setVisibility(View.VISIBLE);
         } else {

@@ -1,21 +1,23 @@
 package nl.yrck.urbandictionary.api;
 
+import android.support.annotation.NonNull;
+
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/*
+ * Main API class for the Urban Dictionary API, exposes the search service
+ */
 public class UDApi {
 
-    public static final String API_HOST = "api.urbandictionary.com";
-    public static final String API_URL = "http://" + API_HOST + "/v0/";
+    private static final String API_HOST = "api.urbandictionary.com";
+    private static final String API_URL = "http://" + API_HOST + "/v0/";
 
     private OkHttpClient okHttpClient;
     private Retrofit retrofit;
 
-    public UDApi() {
-    }
-
+    @NonNull
     private Retrofit.Builder retrofitBuilder() {
         return new Retrofit.Builder()
                 .baseUrl(API_URL)
@@ -38,6 +40,9 @@ public class UDApi {
         return retrofit;
     }
 
+    /*
+     * Gets the search service
+     */
     public SearchService searchService() {
         return getRetrofit().create(SearchService.class);
     }

@@ -6,6 +6,9 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
+/*
+ * Wrapper for the search result
+ */
 public class SearchResult implements Serializable {
     public List<String> tags;
 

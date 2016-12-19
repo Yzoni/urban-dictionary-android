@@ -18,19 +18,17 @@ import com.google.firebase.database.Query;
 import nl.yrck.urbandictionary.adapters.SearchHistoryAdapter;
 import nl.yrck.urbandictionary.firebaseModels.SearchHistoryItem;
 
+/*
+ * Fragment to display the search history
+ */
 public class SearchHistoryFragment extends Fragment {
 
     public static String TAG = "SEARCH_HIST_FRAGMENT";
     private OnFragmentInteractionListener onFragmentInteractionListener;
-    private DatabaseReference database;
-    private RecyclerView recycler;
-    private SearchHistoryAdapter adapter;
-    private LinearLayoutManager lm;
 
     public SearchHistoryFragment() {
         // Required empty public constructor
     }
-
 
     public static SearchHistoryFragment newInstance() {
         SearchHistoryFragment fragment = new SearchHistoryFragment();
@@ -43,19 +41,25 @@ public class SearchHistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_search_history, container, false);
-        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        database = FirebaseDatabase.getInstance().getReference().child("user-searchhistory");
 
-        recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
+        // Setup the database reference
+        DatabaseReference database = FirebaseDatabase.getInstance().getReference()
+                .child("user-searchhistory");
+
+        RecyclerView recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
         recycler.setHasFixedSize(true);
 
-        lm = new LinearLayoutManager(getActivity());
+        LinearLayoutManager lm = new LinearLayoutManager(getActivity());
         lm.setStackFromEnd(true);
         lm.setReverseLayout(true);
         recycler.setLayoutManager(lm);
 
+        // Setup adapter with search history data
+        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Query query = database.child(userId);
-        adapter = new SearchHistoryAdapter(SearchHistoryItem.class, R.layout.search_history_item, query.orderByChild("timestamp"));
+        SearchHistoryAdapter adapter = new SearchHistoryAdapter(SearchHistoryItem.class,
+                R.layout.search_history_item, query.orderByChild("timestamp"));
+
         adapter.setOnItemClickListener((position, v) -> useHistoryItem(v));
         recycler.setAdapter(adapter);
 
@@ -86,10 +90,14 @@ public class SearchHistoryFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+
+        // Set null to avoid memory leak
         onFragmentInteractionListener = null;
     }
 
     public interface OnFragmentInteractionListener {
+
+        // Set the search field text in activity from this fragment
         void setSearchField(String term);
     }
 }

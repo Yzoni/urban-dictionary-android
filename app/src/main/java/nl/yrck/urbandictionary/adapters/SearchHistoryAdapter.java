@@ -21,7 +21,8 @@ public class SearchHistoryAdapter extends FirebaseRecyclerAdapter<SearchHistoryI
     }
 
     @Override
-    protected void populateViewHolder(final SearchHistoryAdapter.ListItemViewHolder viewHolder, final SearchHistoryItem model, final int position) {
+    protected void populateViewHolder(final SearchHistoryAdapter.ListItemViewHolder viewHolder,
+                                      final SearchHistoryItem model, final int position) {
         viewHolder.bindToPost(model);
     }
 
@@ -33,6 +34,7 @@ public class SearchHistoryAdapter extends FirebaseRecyclerAdapter<SearchHistoryI
         void onItemClick(int position, View v);
     }
 
+    // Requires public
     public static class ListItemViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 

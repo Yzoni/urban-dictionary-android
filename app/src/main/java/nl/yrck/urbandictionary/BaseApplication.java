@@ -6,7 +6,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 /*
  * The only purpose of this class is to enable persistent data in Firebase. We do it this way
- * to avoid crashes from trying to initialize persistence twice.
+ * to avoid initialing data persistence twice, which would result in a application crash.
  */
 public class BaseApplication extends Application {
 

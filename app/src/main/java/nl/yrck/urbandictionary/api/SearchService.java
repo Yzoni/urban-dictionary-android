@@ -6,6 +6,9 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
+/*
+ * Used to execute a search on the API
+ */
 public interface SearchService {
     @GET("define")
     Call<SearchResult> get(

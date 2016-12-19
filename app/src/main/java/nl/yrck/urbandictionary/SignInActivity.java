@@ -19,9 +19,9 @@ import nl.yrck.urbandictionary.firebaseModels.User;
 
 /*
  * Handles signin and signup
- * <p>
+ *
  * Boilerplate code taken from
- * <p>
+ *
  * https://github.com/firebase/quickstart-android/blob/master/database/app/src/main/java/com/
  * google/firebase/quickstart/database/SignInActivity.java
  */

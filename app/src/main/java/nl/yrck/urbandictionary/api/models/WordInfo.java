@@ -2,6 +2,9 @@ package nl.yrck.urbandictionary.api.models;
 
 import java.io.Serializable;
 
+/*
+ * Single matching found word
+ */
 public class WordInfo implements Serializable {
     public int defid;
     public String word;

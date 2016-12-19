@@ -10,11 +10,14 @@ import nl.yrck.urbandictionary.api.UDApi;
 import nl.yrck.urbandictionary.api.models.SearchResult;
 import retrofit2.Call;
 
+/*
+ * Loader for the search result from the UB API
+ */
 public class SearchResultsLoader extends AsyncTaskLoader<SearchResult> {
 
     public static String TAG = "SEARCH_LOADER";
 
-    String searchTerm;
+    private String searchTerm;
 
     public SearchResultsLoader(Context context, String searchTerm) {
         super(context);
@@ -29,14 +32,12 @@ public class SearchResultsLoader extends AsyncTaskLoader<SearchResult> {
 
     @Override
     public SearchResult loadInBackground() {
-        Log.d(TAG, "load in background started");
-
+        Log.d(TAG, "Load in background search started");
         try {
             Call<SearchResult> searchResultCall = new UDApi().searchService().get(
                     this.searchTerm
             );
-            SearchResult searchResult = searchResultCall.execute().body();
-            return searchResult;
+            return searchResultCall.execute().body();
         } catch (IOException e) {
             Log.e(TAG, "Search failed");
         }
