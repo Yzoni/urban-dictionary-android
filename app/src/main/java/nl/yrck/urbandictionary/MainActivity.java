@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity
         searchResultLoader = loaderSearchResult();
 
         searchField = (EditText) findViewById(R.id.search_field);
-        searchField.setOnEditorActionListener((view, i, keyEvent) -> onEditTextKey(i));
+        searchField.setOnEditorActionListener((view, i, keyEvent) -> onEditTextKeyPress(i));
 
         resetButton = (ImageButton) findViewById(R.id.search_reset_btn);
         resetButton.setOnClickListener((v) -> onResetButton());
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity
         searchField.requestFocus();
     }
 
-    private boolean onEditTextKey(int actionId) {
+    private boolean onEditTextKeyPress(int actionId) {
         if (actionId == EditorInfo.IME_ACTION_SEARCH) {
             doSearch();
         }
@@ -175,7 +175,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        // Always go back to the search history fragment first, set it another fragment is there
+        // Always go back to the search history fragment first, set it when another fragment is
+        // there
         if (!activeFragment.equals(SearchHistoryFragment.TAG)) {
             setHistoryFragment();
         } else {
@@ -281,7 +282,7 @@ public class MainActivity extends AppCompatActivity
                 searchResult = data;
                 fragment.activityDataUpdated(searchResult);
 
-                // Hide loading spinner show content
+                // Hide loading spinner and show content
                 spinnerLayout.setVisibility(View.GONE);
                 mainBottomLayout.setVisibility(View.VISIBLE);
             }

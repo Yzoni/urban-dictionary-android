@@ -4,8 +4,10 @@
 Native android app which uses the Urban Dictionary API to lookup words. Search for a word to get
 its definition and examples. It is also possible to share a result using the share button on each
 item. Firebase signup is required to save personal search history locally. A search history item can
-be removed by swiping the item to the left or the right. App saves its state when switching apps or
-when screen rotates.
+be removed by swiping the item to the left or the right. Clicking on a search history item puts the
+text into the search box.
+
+App saves its state when switching apps or when screen rotates.
 
 ### Screenshots
 ![1](/screenshots/search_result.png?raw=true "screen_result")
