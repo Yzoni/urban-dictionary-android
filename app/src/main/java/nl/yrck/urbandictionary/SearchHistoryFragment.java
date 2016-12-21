@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,9 @@ public class SearchHistoryFragment extends Fragment {
     public static String TAG = "SEARCH_HIST_FRAGMENT";
     private OnFragmentInteractionListener onFragmentInteractionListener;
 
+    SearchHistoryAdapter adapter;
+    RecyclerView recycler;
+
     public SearchHistoryFragment() {
         // Required empty public constructor
     }
@@ -50,7 +54,7 @@ public class SearchHistoryFragment extends Fragment {
         DatabaseReference database = FirebaseDatabase.getInstance().getReference()
                 .child("user-searchhistory");
 
-        RecyclerView recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
+        recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
         recycler.setHasFixedSize(true);
 
         LinearLayoutManager lm = new LinearLayoutManager(getActivity());
@@ -61,11 +65,14 @@ public class SearchHistoryFragment extends Fragment {
         // Setup adapter with search history data
         final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Query query = database.child(userId);
-        SearchHistoryAdapter adapter = new SearchHistoryAdapter(SearchHistoryItem.class,
+        adapter = new SearchHistoryAdapter(SearchHistoryItem.class,
                 R.layout.search_history_item, query.orderByChild("timestamp"));
 
         adapter.setOnItemClickListener((position, v) -> useHistoryItem(v));
         recycler.setAdapter(adapter);
+
+        // Set swipe action to remove history item
+        setSwipeOnRecyclerView();
 
         return rootView;
     }
@@ -78,6 +85,26 @@ public class SearchHistoryFragment extends Fragment {
         String searchText = textView.getText().toString();
         onFragmentInteractionListener.setSearchField(searchText);
         return true;
+    }
+
+    private void setSwipeOnRecyclerView() {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback =
+                new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                    @Override
+                    public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                        adapter.getRef(viewHolder.getAdapterPosition()).removeValue();
+                    }
+
+                    @Override
+                    public boolean onMove(RecyclerView recyclerView,
+                                          RecyclerView.ViewHolder viewHolder,
+                                          RecyclerView.ViewHolder target) {
+                        return false;
+                    }
+                };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recycler);
     }
 
     @Override

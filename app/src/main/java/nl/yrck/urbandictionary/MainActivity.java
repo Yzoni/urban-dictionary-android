@@ -16,9 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity
     private String activeFragment = SearchHistoryFragment.TAG;
 
     private EditText searchField;
-    private Button resetButton;
+    private ImageButton resetButton;
     private SearchResult searchResult;
     private FrameLayout spinnerLayout;
     private FrameLayout mainBottomLayout;
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity
         searchField = (EditText) findViewById(R.id.search_field);
         searchField.setOnEditorActionListener((view, i, keyEvent) -> onEditTextKey(i));
 
-        resetButton = (Button) findViewById(R.id.search_reset_btn);
+        resetButton = (ImageButton) findViewById(R.id.search_reset_btn);
         resetButton.setOnClickListener((v) -> onResetButton());
 
         spinnerLayout = (FrameLayout) findViewById(R.id.main_bottom_layout_spinner);
@@ -132,11 +132,13 @@ public class MainActivity extends AppCompatActivity
 
 
     /*
-     * Reset the search field and
+     * Reset the search field and set the history fragment if not set
      */
     private void onResetButton() {
         searchField.setText("");
-        setHistoryFragment();
+        if (activeFragment.equals(SearchResultsFragment.TAG)) {
+            setHistoryFragment();
+        }
         searchField.requestFocus();
     }
 
@@ -192,11 +194,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void setSearchField(String historyTerm) {
         searchField.setText(historyTerm);
-        doSearch();
     }
 
     /*
-     * Save a search term to the firebase database search history
+     * Save a search term to the firebase database search history, overwriting a previous search
+     * with the same search term if exists.
      */
     private void saveSearchHistoryItem(String searchTerm) {
         final String userId = getCurrentUserId();
@@ -211,10 +213,11 @@ public class MainActivity extends AppCompatActivity
                             Toast.makeText(MainActivity.this, "Could not fetch user.",
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            String key = userSearchHistoryReference.push().getKey();
+                            userSearchHistoryReference.push();
                             SearchHistoryItem savedItem = new SearchHistoryItem(
                                     searchTerm, System.currentTimeMillis() / 1000L);
-                            userSearchHistoryReference.child(key).setValue(savedItem);
+                            userSearchHistoryReference.child(Integer.toString(searchTerm.hashCode()))
+                                    .setValue(savedItem);
                         }
                     }
 

@@ -38,5 +38,6 @@
     <string name="link_button">Link button</string>
     <string name="thumbs_down">Thumbs down</string>
     <string name="thumbs_up">Thumbs up</string>
+    <string name="no_results">No results</string>
 
 </resources>
