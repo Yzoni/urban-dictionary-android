@@ -17,9 +17,16 @@ public class UDApi {
 
     private static final String API_HOST = "api.urbandictionary.com";
     private static final String API_URL = "http://" + API_HOST + "/v0/";
-
+    private static UDApi udApi;
     private OkHttpClient okHttpClient;
     private Retrofit retrofit;
+
+    public static UDApi getApi() {
+        if (udApi == null) {
+            udApi = new UDApi();
+        }
+        return udApi;
+    }
 
     @NonNull
     private Retrofit.Builder retrofitBuilder() {

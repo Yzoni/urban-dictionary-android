@@ -1,109 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app2="http://schemas.android.com/apk/res-auto"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_gravity="center"
+    android:layout_marginBottom="4dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="4dp"
+    card_view:cardCornerRadius="0dp">
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="8dp"
-        card_view:cardCornerRadius="4dp">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/thumb_up_btn"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@null"
+            android:contentDescription="@string/thumbs_up"
+            app:layout_constraintRight_toLeftOf="@+id/thumb_up_txt"
+            app:layout_constraintTop_toTopOf="@+id/link_btn"
+            app:srcCompat="@drawable/ic_thumb_up_black_24px" />
+
+        <TextView
+            android:id="@+id/thumb_up_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:text="39"
+            app:layout_constraintRight_toLeftOf="@+id/thumb_down_btn"
+            app:layout_constraintTop_toTopOf="@+id/link_btn" />
+
+        <ImageView
+            android:id="@+id/thumb_down_btn"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@null"
+            android:contentDescription="@string/thumbs_down"
+            app:layout_constraintRight_toLeftOf="@+id/thumb_down_txt"
+            app:layout_constraintTop_toTopOf="@+id/link_btn"
+            app:srcCompat="@drawable/ic_thumb_down_black_24px" />
+
+        <TextView
+            android:id="@+id/thumb_down_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:text="303"
+            app:layout_constraintRight_toLeftOf="@+id/link_btn"
+            app:layout_constraintTop_toTopOf="@+id/link_btn" />
+
+        <ImageButton
+            android:id="@+id/link_btn"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@null"
+            android:contentDescription="@string/link_button"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_share_black_24px" />
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="16dp">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/word">
 
             <TextView
-                android:id="@+id/word"
+                android:id="@+id/definition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Search tlerm"
-                android:textSize="19sp"
-                android:textStyle="bold" />
+                android:text="@string/sample_definition" />
 
-            <LinearLayout
-                android:id="@+id/vote_layout"
+            <TextView
+                android:id="@+id/example"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/thumb_up_btn"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@null"
-                    android:contentDescription="@string/thumbs_up"
-                    app2:srcCompat="@drawable/ic_thumb_up_black_24px" />
-
-                <TextView
-                    android:id="@+id/thumb_up_txt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
-                    android:text="39" />
-
-                <ImageView
-                    android:id="@+id/thumb_down_btn"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
-                    android:background="@null"
-                    android:contentDescription="@string/thumbs_down"
-                    app2:srcCompat="@drawable/ic_thumb_down_black_24px" />
-
-                <TextView
-                    android:id="@+id/thumb_down_txt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
-                    android:text="303" />
-
-                <ImageButton
-                    android:id="@+id/link_btn"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginStart="15dp"
-                    android:background="@null"
-                    android:contentDescription="@string/link_button"
-                    app2:srcCompat="@drawable/ic_share_black_24px" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/text_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/vote_layout"
-                android:layout_marginTop="15dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/definition"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sample_definition" />
-
-                <TextView
-                    android:id="@+id/example"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="@string/sample_example"
-                    android:textStyle="italic" />
-            </LinearLayout>
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+                android:layout_marginTop="8dp"
+                android:text="@string/sample_example"
+                android:textStyle="italic" />
+        </LinearLayout>
 
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/word"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:text="Search term"
+            android:textColor="#000000"
+            android:textSize="19sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>

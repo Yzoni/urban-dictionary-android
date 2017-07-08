@@ -15,13 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
+import java.util.List;
 
 import nl.yrck.urbandictionary.adapters.SearchHistoryAdapter;
-import nl.yrck.urbandictionary.firebaseModels.SearchHistoryItem;
+import nl.yrck.urbandictionary.db.DbHelper;
+import nl.yrck.urbandictionary.db.models.SearchHistoryItem;
 
 /*
  * Fragment to display the search history
@@ -29,10 +27,10 @@ import nl.yrck.urbandictionary.firebaseModels.SearchHistoryItem;
 public class SearchHistoryFragment extends Fragment {
 
     public static String TAG = "SEARCH_HIST_FRAGMENT";
-    private OnFragmentInteractionListener onFragmentInteractionListener;
-
     SearchHistoryAdapter adapter;
     RecyclerView recycler;
+    List<SearchHistoryItem> searchHistoryItems;
+    private OnFragmentInteractionListener onFragmentInteractionListener;
 
     public SearchHistoryFragment() {
         // Required empty public constructor
@@ -50,10 +48,6 @@ public class SearchHistoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_search_history, container, false);
 
-        // Setup the database reference
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference()
-                .child("user-searchhistory");
-
         recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
         recycler.setHasFixedSize(true);
 
@@ -62,11 +56,9 @@ public class SearchHistoryFragment extends Fragment {
         lm.setReverseLayout(true);
         recycler.setLayoutManager(lm);
 
-        // Setup adapter with search history data
-        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Query query = database.child(userId);
-        adapter = new SearchHistoryAdapter(SearchHistoryItem.class,
-                R.layout.search_history_item, query.orderByChild("timestamp"));
+        DbHelper db = new DbHelper(getContext());
+        searchHistoryItems = db.listSearchHistoryItems();
+        adapter = new SearchHistoryAdapter(searchHistoryItems);
 
         adapter.setOnItemClickListener((position, v) -> useHistoryItem(v));
         recycler.setAdapter(adapter);
@@ -92,7 +84,8 @@ public class SearchHistoryFragment extends Fragment {
                 new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
                     @Override
                     public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                        adapter.getRef(viewHolder.getAdapterPosition()).removeValue();
+                        searchHistoryItems.remove(viewHolder.getAdapterPosition());
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override

@@ -27,6 +27,7 @@ import nl.yrck.urbandictionary.api.models.WordInfo;
 public class SearchResultsFragment extends Fragment {
 
     public static final String TAG = "SEARCHRESULT_FRAG";
+    RecyclerView recycler;
     private List<WordInfo> wordInfos = new ArrayList<>();
     private SearchResultsAdapter adapter;
     private TextView noResults;
@@ -71,7 +72,7 @@ public class SearchResultsFragment extends Fragment {
             noResults.setVisibility(View.VISIBLE);
         }
 
-        RecyclerView recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
+        recycler = (RecyclerView) rootView.findViewById(R.id.recycler);
         recycler.setHasFixedSize(true);
 
         RecyclerView.LayoutManager lm = new LinearLayoutManager(getActivity());
@@ -115,6 +116,8 @@ public class SearchResultsFragment extends Fragment {
         } else {
             noResults.setVisibility(View.GONE);
         }
+
+        recycler.scrollToPosition(0);
 
         adapter.notifyDataSetChanged();
     }
